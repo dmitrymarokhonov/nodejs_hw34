@@ -10,9 +10,11 @@ block content
         .admin-header__title Административная панель
         a(href="/").admin-header__link Вернуться на сайт
     section.admin-content
+      if (msg)
+        .msg= msg
       .container.admin-content__container
         .form-container
-          form.form-skill(action='/admin/skills' method="POST")
+          form.form-skill(action='/admin/skills' method="POST" enctype="multipart/form-data")
             .form-title Счетчики
             if (msgskill)
               .status= msgskill
@@ -30,7 +32,8 @@ block content
               input(name="years" type="number").form-skill__input
             .form__btns.form-skill__input-line
               button(type="submit").button Сохранить
-          form.form-upload(action='/admin/upload' method="POST" enctype="application/x-www-form-urlencoded")
+          //- form.form-upload(action='/admin/upload' method="POST" enctype="application/x-www-form-urlencoded")
+          form.form-upload(action='/admin/upload' method="POST" enctype="multipart/form-data")
             .form-title Добавить товар
             if (msgfile)
               .status= msgfile

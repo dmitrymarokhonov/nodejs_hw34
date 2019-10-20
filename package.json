@@ -4,6 +4,7 @@
   "author": "krabaton",
   "license": "ISC",
   "scripts": {
+    "dev": "nodemon app.js",
     "start": "set NODE_ENV=development&& gulp",
     "build": "set NODE_ENV=production&& gulp build"
   },
@@ -35,11 +36,16 @@
     "gulp-uglify": "^3.0.0",
     "gulp.spritesmith": "^6.9.0",
     "merge-stream": "^1.0.1",
+    "nodemon": "^1.19.3",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0"
   },
   "dependencies": {
+    "express": "^4.17.1",
+    "express-session": "^1.17.0",
+    "formidable": "^1.2.1",
     "jquery": "^3.3.1",
+    "nconf": "^0.10.0",
     "normalize.css": "^7.0.0"
   }
 }
