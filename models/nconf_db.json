@@ -109,6 +109,12 @@
       "dirLinux": "/assets/img/products/Sun.jpg",
       "name": "Sun",
       "price": "12"
+    },
+    "Лес": {
+      "dirWindows": "\\assets\\img\\products\\photo-1558389157-a986a38f3431.jpeg",
+      "dirLinux": "/assets/img/products/photo-1558389157-a986a38f3431.jpeg",
+      "name": "Лес",
+      "price": "33"
     }
   },
   "users": {
@@ -232,6 +238,11 @@
       "name": "Астеройд",
       "email": "dmitry.test@test.com",
       "message": "asfasdfasdfasf"
+    },
+    "2019-10-22_180508.741Z": {
+      "name": "Дмитрий Марохонов",
+      "email": "dmitry.marokhonov@yandex.ru",
+      "message": "fasdfjasdf.jn"
     }
   }
 }
