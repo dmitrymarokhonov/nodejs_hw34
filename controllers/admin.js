@@ -1,5 +1,3 @@
-const fs = require('fs');
-const path = require('path');
 const formidable = require('formidable');
 const nconfDb = require('../models/nconfDb')();
 
@@ -20,10 +18,7 @@ module.exports.postSkills = (req, res, next) => {
     }
 
     nconfDb.set(
-      `skills:${new Date()
-        .toISOString()
-        .replace(/:/g, '')
-        .replace('T', '_')}`,
+      'skills',
       {
         age: fields.age,
         concerts: fields.concerts,
@@ -36,58 +31,26 @@ module.exports.postSkills = (req, res, next) => {
   });
 };
 
-module.exports.postUpload = (req, res, next) => {
-  let uploadForm = new formidable.IncomingForm();
-  let upload = path.join(process.cwd(), 'public', 'assets', 'img', 'products');
+module.exports.postMulterUpload = (req, res, next) => {
+  const image = req.file;
+  const fields = req.body;
+  !image && res.status(422).render('/admin?msg=Ошибка при добавлении фото');
+  
+  const valid = validateUpload(fields, image);
+  valid.err && res.status(422).render(`/admin?msg=${valid.status}`);
 
-  if (!fs.existsSync(upload)) {
-    fs.mkdirSync(upload);
-  }
-
-  uploadForm.uploadDir = upload;
-
-  uploadForm.parse(req, (err, fields, files) => {
-    if (err) {
-      return next();
-    }
-
-    const valid = validateUpload(fields, files);
-
-    if (valid.err) {
-      fs.unlinkSync(files.photo.path);
-      return res.redirect(`admin/?msg=${valid.status}`);
-    }
-
-    const fileName = path.join(upload, files.photo.name);
-    const pathArr = fileName.split('/');
-    const filePath = pathArr.splice(pathArr.indexOf('assets'), pathArr.length);
-    const filePathWin = filePath
-      .map(pathItem => '\\' + pathItem)
-      .reduce((acc, cur) => acc + cur);
-    const filePathLinux = filePath
-      .map(pathItem => '/' + pathItem)
-      .reduce((acc, cur) => acc + cur);
-
-    fs.rename(files.photo.path, fileName, err => {
-      if (err) {
-        console.log(err.message);
-        return;
-      }
-
-      nconfDb.set(`uploads:${fields.name}`, {
-        dirWindows: filePathWin,
-        dirLinux: filePathLinux,
-        name: fields.name,
-        price: fields.price
-      });
-      nconfDb.save();
-      res.redirect('/admin?msg=Товар успешно добавлен');
-    });
+  nconfDb.set(`products:${fields.name}`, {
+    src: image.path.slice(image.path.indexOf('/')),
+    name: req.body.name,
+    price: req.body.price
   });
-};
+  nconfDb.save();
+  res.redirect('/');
+}
 
-const validateUpload = (fields, files) => {
-  if (files.photo.name === '' || files.photo.size === 0) {
+
+const validateUpload = (fields, image) => {
+  if (image.originalname === '' || image.size === 0) {
     return { status: 'Не загружена картинка!', err: true };
   }
   if (!fields.name) {

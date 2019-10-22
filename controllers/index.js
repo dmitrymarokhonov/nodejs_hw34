@@ -2,7 +2,11 @@ const formidable = require('formidable');
 const nconfDb = require('../models/nconfDb')();
 
 module.exports.get = (req, res) => {
-  res.render('pages/index', { title: 'Home', msgsemail: req.query.msgsemail });
+  
+  const products = Object.values(nconfDb.get('products') || {});
+
+  console.log(products);
+  res.render('pages/index', { title: 'Home', msgsemail: req.query.msgsemail, products: products });
 };
 
 module.exports.postMessage = (req, res, next) => {

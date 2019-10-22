@@ -1,5 +1,8 @@
 const express = require('express');
+const multer = require('multer');
 const router = express.Router();
+
+const upload = multer({ dest: 'public/assets/img/products/' })
 
 const ctrlHome = require('../controllers/index');
 const ctrlLogin = require('../controllers/login');
@@ -12,11 +15,11 @@ const isAdmin = (req, res, next) => {
 router.get('/login', ctrlLogin.get);
 router.post('/login', ctrlLogin.post);
 
-router.get('/', isAdmin, ctrlHome.get);
-router.post('/', isAdmin, ctrlHome.postMessage);
+router.get('/', ctrlHome.get);
+router.post('/', ctrlHome.postMessage);
 
 router.get('/admin', isAdmin, ctrlAdmin.get);
-router.post('/admin/upload', isAdmin, ctrlAdmin.postUpload);
+router.post('/admin/upload', isAdmin, ctrlAdmin.postMulterUpload);
 router.post('/admin/skills', isAdmin, ctrlAdmin.postSkills);
 
 

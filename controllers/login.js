@@ -7,16 +7,11 @@ module.exports.get = (req, res) => {
 };
 
 module.exports.post = (req, res) => {
-  const users = nconfDb.get('users');
-  for (let user in users) {
-    if (
-      users[user].email === req.body.email &&
-      users[user].password === req.body.password
-    ) {
-      req.session.isAdmin = true;
-    }
+  const users = Object.values(nconfDb.get('users'));
+  let existUser = users.find(user => user.email === req.body.email)
+  if (!existUser || existUser.password !== req.body.password) {
+    res.status(401).json({ message: 'Authorization failed!' })
   }
-  req.session.isAdmin
-    ? res.redirect('/')
-    : res.status(401).json({ message: 'Authorization failed!' });
+  req.session.isAdmin = true;
+  res.redirect('/admin')
 };
