@@ -2,11 +2,16 @@ const formidable = require('formidable');
 const nconfDb = require('../models/nconfDb')();
 
 module.exports.get = (req, res) => {
-  
+
   const products = Object.values(nconfDb.get('products') || {});
 
-  console.log(products);
-  res.render('pages/index', { title: 'Home', msgsemail: req.query.msgsemail, products: products });
+  console.log(`index controller isAuth: ${req.session.isAdmin}`);
+  res.render('pages/index', { 
+    title: 'Home', 
+    msgsemail: req.query.msgsemail,
+    isAuth: req.session.isAdmin, 
+    products: products 
+  });
 };
 
 module.exports.postMessage = (req, res, next) => {

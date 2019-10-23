@@ -1,8 +1,10 @@
 footer.footer
   .container.footer__container
-      .footer__auth 
+      .footer__auth
+      if (isAuth)
+        a(href="/admin").title-name Админ
+      else
         a(href="/login").title-name Авторизация
-          span.title-name__doter .
       .footer__social
         ul.social
           each item in social
