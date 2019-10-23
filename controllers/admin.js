@@ -1,4 +1,3 @@
-const formidable = require('formidable');
 const nconfDb = require('../models/nconfDb')();
 
 module.exports.get = (req, res) => {
@@ -6,36 +5,32 @@ module.exports.get = (req, res) => {
 };
 
 module.exports.postSkills = (req, res, next) => {
-  let skillsForm = new formidable.IncomingForm();
-  skillsForm.parse(req, (err, fields) => {
-    if (err) {
-      return next();
-    }
-    console.log(fields);
-    const valid = validateSkills(fields);
-    if (valid.err) {
-      return res.redirect(`msg=${valid.status}`);
-    }
 
-    nconfDb.set(
-      'skills',
-      {
-        age: fields.age,
-        concerts: fields.concerts,
-        cities: fields.cities,
-        years: fields.years
-      }
-    );
-    nconfDb.save();
-    res.redirect('/admin?msg=Счетчик успешно добавлен');
-  });
+  console.log(req.body);
+  const fields = req.body;
+  const valid = validateSkills(fields);
+  if (valid.err) {
+    return res.redirect(`/admin?msg=${valid.status}`);
+  }
+
+  nconfDb.set(
+    'skills',
+    {
+      age: fields.age,
+      concerts: fields.concerts,
+      cities: fields.cities,
+      years: fields.years
+    }
+  );
+  nconfDb.save();
+  res.redirect('/admin?msg=Счетчик успешно добавлен');
 };
 
 module.exports.postMulterUpload = (req, res, next) => {
   const image = req.file;
   const fields = req.body;
   !image && res.status(422).render('/admin?msg=Ошибка при добавлении фото');
-  
+
   const valid = validateUpload(fields, image);
   valid.err && res.status(422).render(`/admin?msg=${valid.status}`);
 

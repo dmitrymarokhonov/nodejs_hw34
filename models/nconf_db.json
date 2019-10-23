@@ -1,11 +1,9 @@
 {
   "skills": {
-    "2019-10-19_212658.790Z": {
-      "age": "1",
-      "concerts": "1",
-      "cities": "1",
-      "years": "1"
-    }
+    "age": "4",
+    "concerts": "4",
+    "cities": "4",
+    "years": "4"
   },
   "users": {
     "dmitry.test@test.com": {
