@@ -1,47 +1,47 @@
 const nconfDb = require('../models/nconfDb')();
 
-module.exports.get = (req, res) => {
-  res.render('pages/admin', { title: 'Admin', msg: req.query.msg });
+module.exports.get = async (ctx, next) => {
+  await ctx.render('pages/admin', { title: 'Admin', msg: ctx.query.msg });
 };
 
-module.exports.postSkills = (req, res, next) => {
+// module.exports.postSkills = (req, res, next) => {
 
-  console.log(req.body);
-  const fields = req.body;
-  const valid = validateSkills(fields);
-  if (valid.err) {
-    return res.redirect(`/admin?msg=${valid.status}`);
-  }
+//   console.log(req.body);
+//   const fields = req.body;
+//   const valid = validateSkills(fields);
+//   if (valid.err) {
+//     return res.redirect(`/admin?msg=${valid.status}`);
+//   }
 
-  nconfDb.set(
-    'skills',
-    {
-      age: fields.age,
-      concerts: fields.concerts,
-      cities: fields.cities,
-      years: fields.years
-    }
-  );
-  nconfDb.save();
-  res.redirect('/admin?msg=Счетчик успешно добавлен');
-};
+//   nconfDb.set(
+//     'skills',
+//     {
+//       age: fields.age,
+//       concerts: fields.concerts,
+//       cities: fields.cities,
+//       years: fields.years
+//     }
+//   );
+//   nconfDb.save();
+//   res.redirect('/admin?msg=Счетчик успешно добавлен');
+// };
 
-module.exports.postMulterUpload = (req, res, next) => {
-  const image = req.file;
-  const fields = req.body;
-  !image && res.status(422).render('/admin?msg=Ошибка при добавлении фото');
+// module.exports.postMulterUpload = (req, res, next) => {
+//   const image = req.file;
+//   const fields = req.body;
+//   !image && res.status(422).render('/admin?msg=Ошибка при добавлении фото');
 
-  const valid = validateUpload(fields, image);
-  valid.err && res.status(422).render(`/admin?msg=${valid.status}`);
+//   const valid = validateUpload(fields, image);
+//   valid.err && res.status(422).render(`/admin?msg=${valid.status}`);
 
-  nconfDb.set(`products:${fields.name}`, {
-    src: image.path.slice(image.path.indexOf('/')),
-    name: req.body.name,
-    price: req.body.price
-  });
-  nconfDb.save();
-  res.redirect('/');
-}
+//   nconfDb.set(`products:${fields.name}`, {
+//     src: image.path.slice(image.path.indexOf('/')),
+//     name: req.body.name,
+//     price: req.body.price
+//   });
+//   nconfDb.save();
+//   res.redirect('/');
+// }
 
 
 const validateUpload = (fields, image) => {

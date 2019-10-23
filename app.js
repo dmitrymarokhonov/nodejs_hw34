@@ -1,31 +1,27 @@
-require('dotenv').config();
 const Koa = require('koa');
-const path = require('path');
+const app = new Koa();
 const static = require('koa-static');
 const session = require('koa-session');
 const Pug = require('koa-pug');
-const multer = require('multer');
-const config = require('./config')
-const router = require('./routes')
-const port = process.env.PORT || 3500;
-
+const multer = require('koa-multer');
 const pug = new Pug({
   viewPath: './views',
   pretty: false,
   basedir: './views',
   noCache: true,
-  app: app
-})
-
-const app = new Koa();
-
+  app: app, // equals to pug.use(app) and app.use(pug.middleware)
+});
+const errorHandler = require('./libs/error');
+const config = require('./config');
+const router = require('./routes');
+const port = process.env.PORT || 3500;
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, callback) => {
-    callback(null, 'public/assets/img/products')
+    callback(null, 'public/assets/img/products');
   },
   filename: (req, file, callback) => {
-    callback(null, new Date().toISOString() + '-' + file.originalname)
+    callback(null, new Date().toISOString() + '-' + file.originalname);
   }
 });
 
@@ -44,24 +40,30 @@ const fileFilter = (req, file, callback) => {
       callback(null, false);
       break;
   }
-}
+};
 
-app.use(static(path.join(__dirname, 'public')));
+app.use(static('./public'));
 
-app.use(multer({ storage: fileStorage, fileFilter: fileFilter }).single('photo'))
+app.use(errorHandler);
 
-app
-.use(session(config.session, app))
-.use(router.routes())
-.use(router.allowMethods());
-
+app.use(
+  multer({ storage: fileStorage, fileFilter: fileFilter }).single('photo')
+);
 
 app.on('error', (err, ctx) => {
+  ctx.request;
+  ctx.response.body = {};
   ctx.render('error', {
-    message: ctx.response.status,
+    status: ctx.response.status,
     error: ctx.response.message
   });
 });
+
+app
+  .use(session(config.session, app))
+  .use(router.routes())
+  .use(router.allowedMethods());
+
 
 const server = app.listen(port, () => {
   console.log('Example app listening on port ' + server.address().port);
