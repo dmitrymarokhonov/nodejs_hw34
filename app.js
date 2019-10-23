@@ -1,9 +1,24 @@
-const express = require('express');
+require('dotenv').config();
+const Koa = require('koa');
 const path = require('path');
-const bodyParser = require('body-parser');
-const session = require('express-session');
+const static = require('koa-static');
+const session = require('koa-session');
+const Pug = require('koa-pug');
 const multer = require('multer');
-const app = express();
+const config = require('./config')
+const router = require('./routes')
+const port = process.env.PORT || 3500;
+
+const pug = new Pug({
+  viewPath: './views',
+  pretty: false,
+  basedir: './views',
+  noCache: true,
+  app: app
+})
+
+const app = new Koa();
+
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, callback) => {
@@ -31,46 +46,23 @@ const fileFilter = (req, file, callback) => {
   }
 }
 
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+app.use(static(path.join(__dirname, 'public')));
 
-app.use(bodyParser.json());
 app.use(multer({ storage: fileStorage, fileFilter: fileFilter }).single('photo'))
-app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use(
-  session({
-    secret: 'homework_3_express',
-    key: 'sessionkey',
-    cookie: {
-      path: '/',
-      httpOnly: true,
-      maxAge: 10 * 60 * 1000
-    },
-    saveUninitialized: false,
-    resave: false
-  })
-);
+app
+.use(session(config.session, app))
+.use(router.routes())
+.use(router.allowMethods());
 
-app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', require('./routes'));
-
-// catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+app.on('error', (err, ctx) => {
+  ctx.render('error', {
+    message: ctx.response.status,
+    error: ctx.response.message
+  });
 });
 
-// error handler
-app.use(function (err, req, res) {
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error', { message: err.message, error: err });
-});
-
-// const server = app.listen(port, () => console.log(`Example app listening on port ${port}`));
-const server = app.listen(process.env.PORT || 3500, () => {
+const server = app.listen(port, () => {
   console.log('Example app listening on port ' + server.address().port);
 });
