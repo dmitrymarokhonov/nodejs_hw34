@@ -6,7 +6,6 @@ module.exports.get = async (ctx, next) => {
 
 module.exports.postSkills = async (ctx, next) => {
   const { age, concerts, cities, years } = ctx.request.body;
-  console.log(ctx.request);
   nconfDb.set(
     'skills',
     {
@@ -21,9 +20,7 @@ module.exports.postSkills = async (ctx, next) => {
 };
 
 module.exports.postMulterUpload = async (ctx, next) => {
-  // Не работает
   const { photo, name, price } = ctx.request.body;
-  console.log(ctx.request.body);
 
   nconfDb.set(`products:${name}`, {
     src: '/assets/img/products/' + photo,
