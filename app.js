@@ -27,8 +27,9 @@ const fileStorage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, callback) => {
+  console.log(file);
   switch (file.mimetype) {
-    case 'image/png':
+    case 'image/png': 
       callback(null, true);
       break;
     case 'image/jpeg':
@@ -47,9 +48,6 @@ app.use(static('./public'));
 
 app.use(errorHandler);
 
-app.use(
-  multer({ storage: fileStorage, fileFilter: fileFilter }).single('photo')
-);
 
 app.use(koaBody({
   multipart: true,
@@ -58,6 +56,9 @@ app.use(koaBody({
   }
 }));
 
+app.use(
+  multer({ storage: fileStorage, fileFilter: fileFilter }).single('photo')
+);
 
 app.on('error', (err, ctx) => {
   ctx.request;

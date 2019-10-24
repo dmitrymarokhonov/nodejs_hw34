@@ -8,7 +8,7 @@ module.exports.get = async (ctx, next) => {
   // isAuth: ctx.request.session.isAdmin, 
   ctx.render('pages/index', {
     title: 'Home',
-    msgsemail: 'some message',
+    msgsemail: ctx.query.msgsemail || '',
     isAuth: ctx.session.isAdmin || false,
     products: products
   });

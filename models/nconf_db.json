@@ -1,9 +1,9 @@
 {
   "skills": {
-    "age": "1",
-    "concerts": "2",
-    "cities": "3",
-    "years": "4"
+    "age": "4",
+    "concerts": "3",
+    "cities": "21",
+    "years": "1"
   },
   "users": {
     "dmitry.test@test.com": {
@@ -26,6 +26,11 @@
       "name": "Forrest",
       "email": "dmitry.test@test.com",
       "message": "ssdfgafg"
+    },
+    "2019-10-24_144234.686Z": {
+      "name": "Forrest",
+      "email": "dmitry.test@test.com",
+      "message": "asdaf"
     }
   },
   "products": {
@@ -49,25 +54,10 @@
       "name": "Dima02",
       "price": "2"
     },
-    "Dima03": {
-      "src": "/assets/img/products/DimaFacebook.jpg",
-      "name": "Dima03",
-      "price": "3"
-    },
-    "Dima04": {
-      "src": "/assets/img/products/DimaFacebook.jpg",
-      "name": "Dima04",
-      "price": "4"
-    },
-    "Dima05": {
-      "src": "/assets/img/products/DimaFacebook.jpg",
-      "name": "Dima05",
-      "price": "5"
-    },
-    "Dima07": {
-      "src": "/assets/img/products/DimaFacebook.jpg",
-      "name": "Dima07",
-      "price": "7"
+    "screen01": {
+      "src": "/assets/img/products/undefined",
+      "name": "screen01",
+      "price": "1742"
     }
   }
 }
