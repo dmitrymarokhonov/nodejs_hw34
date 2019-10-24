@@ -14,7 +14,7 @@
     "koa": "^2.10.0",
     "koa-body": "^4.1.1",
     "koa-multer": "^1.0.2",
-    "koa-pug": "^4.0.2",
+    "koa-pug": "^3.0.0-2",
     "koa-router": "^7.4.0",
     "koa-session": "^5.12.3",
     "koa-static": "^5.0.0",

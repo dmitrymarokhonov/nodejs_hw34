@@ -11,7 +11,7 @@ const isAdmin = (ctx, next ) => {
 };
 
 router.get('/', ctrlHome.get);
-// router.post('/', ctrlHome.postMessage);
+router.post('/', koaBody(), ctrlHome.postMessage);
 
 router.get('/login', ctrlLogin.get);
 router.post('/login', koaBody(), ctrlLogin.post);

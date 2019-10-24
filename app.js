@@ -53,7 +53,7 @@ app.use(
 app.on('error', (err, ctx) => {
   ctx.request;
   ctx.response.body = {};
-  ctx.render('error', {
+  ctx.redirect('/', {
     status: ctx.response.status,
     error: ctx.response.message
   });
