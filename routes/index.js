@@ -1,6 +1,6 @@
 const Router = require('koa-router');
 const router = new Router();
-const koaBody = require('koa-body');
+// const koaBody = require('koa-body');
 
 const ctrlHome = require('../controllers/index');
 const ctrlLogin = require('../controllers/login');
@@ -11,21 +11,14 @@ const isAdmin = (ctx, next) => {
 };
 
 router.get('/', ctrlHome.get);
-router.post('/', koaBody({
-  multipart: true,
-}), ctrlHome.postMessage);
+router.post('/', ctrlHome.postMessage);
 
 router.get('/login', ctrlLogin.get);
-router.post('/login', koaBody(), ctrlLogin.post);
+router.post('/login', ctrlLogin.post);
 
 
-router.post('/admin/skills', koaBody(), ctrlAdmin.postSkills);
+router.post('/admin/skills', ctrlAdmin.postSkills);
 router.get('/admin', isAdmin, ctrlAdmin.get);
-router.post('/admin/upload', koaBody({
-  multipart: true,
-  formidable: {
-    uploadDir: process.cwd() + '/public/assets/img/products'
-  }
-}), ctrlAdmin.postMulterUpload);
+router.post('/admin/upload', ctrlAdmin.postMulterUpload);
 
 module.exports = router;

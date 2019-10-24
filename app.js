@@ -4,6 +4,7 @@ const static = require('koa-static');
 const session = require('koa-session');
 const Pug = require('koa-pug');
 const multer = require('koa-multer');
+const koaBody = require('koa-body');
 const pug = new Pug({
   viewPath: './views',
   pretty: false,
@@ -21,7 +22,7 @@ const fileStorage = multer.diskStorage({
     callback(null, 'public/assets/img/products');
   },
   filename: (req, file, callback) => {
-    callback(null, new Date().toISOString() + '-' + file.originalname);
+    callback(null, file.originalname);
   }
 });
 
@@ -49,6 +50,14 @@ app.use(errorHandler);
 app.use(
   multer({ storage: fileStorage, fileFilter: fileFilter }).single('photo')
 );
+
+app.use(koaBody({
+  multipart: true,
+  formidable: {
+    uploadDir: process.cwd() + '/public/assets/img/products'
+  }
+}));
+
 
 app.on('error', (err, ctx) => {
   ctx.request;
